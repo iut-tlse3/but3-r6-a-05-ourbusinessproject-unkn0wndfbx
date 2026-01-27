@@ -1,10 +1,12 @@
 package ourbusinessproject;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class EnterpriseProjectService {
@@ -49,5 +51,10 @@ public class EnterpriseProjectService {
 
     public Enterprise findEnterpriseById(Long id) {
         return entityManager.find(Enterprise.class, id);
+    }
+
+    public List<Project> findAllProjects() {
+        return entityManager.createQuery("SELECT p FROM Project p ORDER BY p.title", Project.class)
+                .getResultList();
     }
 }
