@@ -1,10 +1,10 @@
 
 # Our Business Project - A spring boot / JPA project
 
-### NOM : DOE
-### Prénom : John
+### NOM : HELBERT
+### Prénom : Titouan
 ### Groupe de TP : 
-- [x] 1
+- [x] 1****
 
 
 
