@@ -20,8 +20,9 @@ public class EnterpriseProjectService {
         return entityManager;
     }
 
-    public Project newProject(String title, String description) {
+    public Project newProject(String title, String description, Enterprise enterprise) {
         Project project = new Project(title, description);
+        project.setEnterprise(enterprise);
         entityManager.persist(project);
         entityManager.flush();
         return project;
