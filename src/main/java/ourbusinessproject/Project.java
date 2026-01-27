@@ -19,17 +19,9 @@ public class Project {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "enterprise_id")
+    @JoinColumn(name = "enterprise")
     @NotNull
     private Enterprise enterprise;
-
-    public Enterprise getEnterprise() {
-        return enterprise;
-    }
-
-    public void setEnterprise(Enterprise enterprise) {
-        this.enterprise = enterprise;
-    }
 
     public Project(String title, String description) {
         this.title = title;
@@ -63,5 +55,13 @@ public class Project {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
+    public void setEnterprise(Enterprise enterprise) {
+        this.enterprise = enterprise;
     }
 }

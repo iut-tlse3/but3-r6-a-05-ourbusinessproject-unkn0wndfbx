@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class EnterpriseProjectService {
     @PersistenceContext
@@ -23,6 +25,12 @@ public class EnterpriseProjectService {
     public Project newProject(String title, String description, Enterprise enterprise) {
         Project project = new Project(title, description);
         project.setEnterprise(enterprise);
+        if (enterprise != null) {
+            if (enterprise.getProjects() == null) {
+                enterprise.setProjects(new ArrayList<>());
+            }
+            enterprise.getProjects().add(project);
+        }
         entityManager.persist(project);
         entityManager.flush();
         return project;

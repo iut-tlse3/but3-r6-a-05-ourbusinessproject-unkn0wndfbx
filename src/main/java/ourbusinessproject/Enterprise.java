@@ -1,14 +1,12 @@
 package ourbusinessproject;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "enterprises")
@@ -33,6 +31,9 @@ public class Enterprise {
     @Email
     @Column(nullable = false)
     private String contactEmail;
+
+    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> projects;
 
     public Enterprise(String name, String description, String contactName, String contactEmail) {
         this.name = name;
@@ -86,5 +87,13 @@ public class Enterprise {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }
