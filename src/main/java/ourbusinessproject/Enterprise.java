@@ -1,12 +1,19 @@
 package ourbusinessproject;
 
-import jakarta.persistence.*;
+import java.util.Comparator;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "enterprises")
@@ -49,7 +56,7 @@ public class Enterprise {
         this.contactEmail = "default contact email";
     }
 
-    public String getTitle() {
+    public String getName() {
         return name;
     }
 
@@ -90,6 +97,9 @@ public class Enterprise {
     }
 
     public List<Project> getProjects() {
+        if (projects != null) {
+            projects.sort(Comparator.comparing(Project::getTitle));
+        }
         return projects;
     }
 

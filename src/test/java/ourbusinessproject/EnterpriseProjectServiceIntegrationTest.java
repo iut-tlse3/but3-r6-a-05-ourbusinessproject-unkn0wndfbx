@@ -1,23 +1,34 @@
 package ourbusinessproject;
 
-import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 
 @SpringBootTest
 @Transactional
 class EnterpriseProjectServiceIntegrationTest {
 
+    // @Autowired is used to inject the EnterpriseProjectService into the
+    // EnterpriseProjectServiceIntegrationTest
     @Autowired
     private EnterpriseProjectService enterpriseProjectService;
+
+    // @Autowired is used to inject the Bootstrap into the
+    // EnterpriseProjectServiceIntegrationTest
+    @Autowired
+    private Bootstrap bootstrap;
 
     private Enterprise enterprise;
     private Project project;
@@ -29,8 +40,7 @@ class EnterpriseProjectServiceIntegrationTest {
                 "a name",
                 "a description",
                 "a contact name",
-                "acontact@email.com"
-        );
+                "acontact@email.com");
     }
 
     @Test
@@ -40,8 +50,7 @@ class EnterpriseProjectServiceIntegrationTest {
         project = enterpriseProjectService.newProject(
                 "a title",
                 "a description",
-                enterprise
-        );
+                enterprise);
         // then: the project as generated id
         assertNotNull(project.getId());
         // when trying to find the project by id
@@ -63,8 +72,7 @@ class EnterpriseProjectServiceIntegrationTest {
         project = enterpriseProjectService.newProject(
                 "a title",
                 "a description",
-                enterprise
-        );
+                enterprise);
         // then: the project as generated id
         assertNotNull(project.getId());
         // when trying to find the project by id
@@ -108,8 +116,7 @@ class EnterpriseProjectServiceIntegrationTest {
                         "a name",
                         "a description",
                         "a contact name",
-                        null
-                ));
+                        null));
     }
 
     @Test
@@ -117,20 +124,42 @@ class EnterpriseProjectServiceIntegrationTest {
         // given an enterprise
 
         // and three persisted projects
-        enterpriseProjectService.newProject("p1", "p1 description", enterprise);
-        enterpriseProjectService.newProject("p3", "p3 description", enterprise);
-        enterpriseProjectService.newProject("p2", "p2 description", enterprise);
+        enterpriseProjectService.newProject("_p1", "p1 description", enterprise);
+        enterpriseProjectService.newProject("_p3", "p3 description", enterprise);
+        enterpriseProjectService.newProject("_p2", "p2 description", enterprise);
 
         // when searching for all projects
         List<Project> projects = enterpriseProjectService.findAllProjects();
 
         // then the three projects are fetched
+        assertEquals(6, projects.size());// 3 + 3 from bootstrap
+
+        // and projects are sorted by title
+        assertEquals("_p1", projects.get(0).getTitle());
+        assertEquals("_p2", projects.get(1).getTitle());
+        assertEquals("_p3", projects.get(2).getTitle());
+    }
+
+    @Test
+    public void testFindAllProjectsFromInitialization() {
+        // Given the initialization service of the bootstrap component
+        InitializationService initializationService = bootstrap.getInitializationService();
+
+        // when searching for all projects
+        List<Project> projects = enterpriseProjectService.findAllProjects();
+
+        // then three projects are fetched
         assertEquals(3, projects.size());
 
         // and projects are sorted by title
-        assertEquals("p1", projects.get(0).getTitle());
-        assertEquals("p2", projects.get(1).getTitle());
-        assertEquals("p3", projects.get(2).getTitle());
+        assertEquals(initializationService.getProject1E1().getTitle(), projects.get(0).getTitle());
+        assertEquals(initializationService.getProject1E2().getTitle(), projects.get(1).getTitle());
+        assertEquals(initializationService.getProject2E1().getTitle(), projects.get(2).getTitle());
+
+        // and projects have the good enterprise affected
+        assertEquals(initializationService.getEnterprise1().getName(), projects.get(0).getEnterprise().getName());
+        assertEquals(initializationService.getEnterprise2().getName(), projects.get(1).getEnterprise().getName());
+        assertEquals(initializationService.getEnterprise1().getName(), projects.get(2).getEnterprise().getName());
 
     }
 }
