@@ -47,6 +47,10 @@ public class InitializationService {
                 "c",
                 "Description projet c",
                 enterprise1);
+
+        // Avec @Transactional, si une exception se produit, toute la transaction
+        // est annulée (rollback). Même si les entreprises et projets précédents ont été créés,
+        // ils seront tous annulés.
     }
 
     public Project getProject1E1() {
