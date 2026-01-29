@@ -1,14 +1,14 @@
 package ourbusinessproject;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BootstrapTest {
@@ -17,6 +17,7 @@ class BootstrapTest {
 
     @Mock
     private InitializationService initializationService;
+
 
     @BeforeEach
     public void setUp() {
@@ -32,9 +33,9 @@ class BootstrapTest {
         // when the init method is triggered
         bootstrap.init();
 
-        // then the initialization of projects is triggered on the initialization
-        // service
+        // then the initialization of projects and partnerships is triggered on the initialization service
         verify(initializationService).initProjects();
+        verify(initializationService).initPartnerships();
     }
 
     @Test

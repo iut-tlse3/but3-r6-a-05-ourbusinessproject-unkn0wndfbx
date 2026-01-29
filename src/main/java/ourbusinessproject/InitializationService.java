@@ -20,6 +20,12 @@ public class InitializationService {
     private Enterprise enterprise1;
     private Enterprise enterprise2;
 
+    private Partnership partnershipP1E1WithE2;
+    private Partnership partnershipP1E2WithE1;
+    private Partnership partnershipP2E1WithE2;
+    @Autowired
+    private PartnershipService partnershipService;
+
     // @Transactional is used to ensure that the transaction is rolled back if an
     // error occurs
     @Transactional
@@ -71,5 +77,30 @@ public class InitializationService {
 
     public Enterprise getEnterprise2() {
         return enterprise2;
+    }
+
+    @Transactional
+    public void initPartnerships() {
+        partnershipP1E1WithE2 = partnershipService.newPartnership(
+                project1E1,
+                enterprise2);
+        partnershipP1E2WithE1 = partnershipService.newPartnership(
+                project1E2,
+                enterprise1);
+        partnershipP2E1WithE2 = partnershipService.newPartnership(
+                project2E1,
+                enterprise2);
+    }
+
+    public Partnership getPartnershipP1E1WithE2() {
+        return partnershipP1E1WithE2;
+    }
+
+    public Partnership getPartnershipP1E2WithE1() {
+        return partnershipP1E2WithE1;
+    }
+
+    public Partnership getPartnershipP2E1WithE2() {
+        return partnershipP2E1WithE2;
     }
 }
